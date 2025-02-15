@@ -1,0 +1,103 @@
+<link rel="stylesheet" href="style.css">
+
+<div class="container">
+    <form class="logForm" action="/sentusr" method="post">
+       
+        <div class="mb-3">
+            <h2 class="text-center mb-4 text-white">Sign Up</h2>
+              <h4 class="text-danger text-center">{{msg}} </h4>
+            <!-- Full Name -->
+            <label for="name" class="form-label text-white">Full Name</label>
+            <input type="text" name="name" class="form-control" id="name" style="background-color: #939393;" required>
+
+            <!-- Phone Number -->
+            <label for="phone" class="form-label text-white">Phone Number</label>
+            <input type="tel" name="phone" class="form-control" id="phone" style="background-color: #939393;" pattern="[0-9]{10}" required>
+
+            <!-- Email -->
+            <label for="email" class="form-label text-white">Email</label>
+            <input type="email" name="email" class="form-control" id="email" style="background-color: #939393;" required>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+            <label for="password" class="form-label text-white">Password</label>
+            <input type="password" name="password" class="form-control" id="password" style="background-color: #939393;" required>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-3">
+            <label for="confirmPassword" class="form-label text-white">Confirm Password</label>
+            <input type="password" name="confirm_password" class="form-control" id="confirmPassword" style="background-color: #939393;" required>
+        </div>
+
+        <!-- Show Password Checkbox -->
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="showPassword">
+            <label class="form-check-label text-white" for="showPassword">Show Password</label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-danger">Sign Up</button><br>
+        <a href="/">loginpage</a>
+    </form>
+</div>
+
+<!-- JavaScript for Verification and Show Password -->
+<script>
+    const ename = document.getElementById("name");
+    const form = document.querySelector('.logForm');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const showPassword = document.getElementById('showPassword');
+    const phoneInput = document.getElementById('phone');
+
+    // Show/Hide Password
+    showPassword.addEventListener('change', () => {
+        const type = showPassword.checked ? 'text' : 'password';
+        password.type = type;
+        confirmPassword.type = type;
+    });
+
+    // Function to check password strength
+    function isPasswordStrong(password) {
+        const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+        return strongPasswordRegex.test(password);
+    }
+
+    // Verify Password Match and Strength
+    form.addEventListener('submit', (e) => {
+        const passwordValue = password.value;
+        const confirmPasswordValue = confirmPassword.value;
+        const nameValue = ename.value.trim();
+        const phoneValue = phoneInput.value.trim();
+
+        // Check full name length and character validity
+        if (!/^[a-zA-Z\s]{6,}$/.test(nameValue)) {
+            e.preventDefault(); // Prevent form submission
+            alert('Full name must be at least 6 characters long and contain only letters.');
+            return;
+        }
+
+        // Check password strength
+        if (!isPasswordStrong(passwordValue)) {
+            e.preventDefault(); // Prevent form submission
+            alert('Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.');
+            return;
+        }
+
+        // Check if passwords match
+        if (passwordValue !== confirmPasswordValue) {
+            e.preventDefault(); // Prevent form submission
+            alert('Passwords do not match!');
+            return;
+        }
+
+        // Check phone number validity
+        if (!/^[0-9]{10}$/.test(phoneValue)) {
+            e.preventDefault(); // Prevent form submission
+            alert('Please enter a valid 10-digit phone number.');
+            return;
+        }
+    });
+</script>
